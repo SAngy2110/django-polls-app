@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<h2>Register</h2>
+<form method="post">
+    {% csrf_token %}
+    {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
+<p>Already have an account? <a href="{% url 'login' %}{% if next %}?next={{ next|urlencode }}{% endif %}">Log in here!</a></p>
+{% endblock %} an account, <a href="{% url 'polls:register' %}">register here!</a></p>

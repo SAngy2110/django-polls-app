@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Polls{% endblock %}
+
+{% block content %}
+<div class="polls-page">
+    <div class="content-card polls-header-card">
+        <h2>Polls List</h2>
+        <p>Select an option in any poll card below and click <strong>Vote</strong>.</p>
+    </div>
+
+    {% if latest_question_list %}
+        <div class="poll-grid">
+            {% for poll in latest_question_list %}
+                <div class="poll-square">
+                    <h3>{{ poll.question_text }}</h3>
+
+                    <form action="{% url 'polls:vote' poll.id %}" method="post" class="square-vote-form">
+                        {% csrf_token %}
+                        <div class="square-choices">
+                            {% for choice in poll.choice_set.all %}
+                                <label class="square-choice">
+                                    <input type="radio" name="choice" value="{{ choice.id }}" required>
+                                    <span>{{ choice.choice_text }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+
+                        <div class="square-actions">
+                            <button type="submit">Vote</button>
+                            <a href="{% url 'polls:results' poll.id %}">View Results</a>
+                            <a href="{% url 'polls:detail' poll.id %}">Comments</a>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="content-card">
+            <p>No polls are available.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
